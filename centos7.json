@@ -1,0 +1,52 @@
+{
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'centos' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
+    }
+  ],
+  "builders": [
+    {
+      "type": "qemu",
+      "iso_urls": [
+        "CentOS-7-x86_64-Minimal-1708.iso",
+        "http://mirrors.ocf.berkeley.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso"
+      ],
+      "iso_checksum": "bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5",
+      "iso_checksum_type": "sha256",
+      "shutdown_command": "echo 'centos'|sudo -S /sbin/halt -h -p",
+      "disk_size": 10240,
+      "format": "qcow2",
+      "headless": true,
+      "accelerator": "kvm",
+      "http_directory": "http",
+      "ssh_username": "centos",
+      "ssh_password": "centos",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "vm_name": "packer-centos-7-x86_64.qcow2",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "boot_wait": "10s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "qemuargs": [
+        [
+          "-m",
+          "512M"
+        ],
+        [
+          "-smp",
+          "cpus=2,maxcpus=16,cores=4"
+        ]
+      ]
+    }
+  ]
+}

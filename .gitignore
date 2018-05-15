@@ -1,0 +1,7 @@
+.DS_Store
+packer_cache/*
+*.box
+iso/*
+output-qemu/*
+.vagrant/*
+builds/*
